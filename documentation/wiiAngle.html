@@ -1,0 +1,385 @@
+
+<H2> Introduction </H2>
+
+<P>
+This document describes a system for training children
+above two years of age to remain motionless
+while in a <b> mock </b> functional magnetic resonance imaging (fMRI)
+scanner. It is <B> NOT </b> in any way compliant
+with an actual fMRI, or MRI, scanner.
+The system was developed at the University of Colorado,
+Boulder, by Niles Oien (nilesOien@gmail.com) in early 2013.
+</P>
+
+<P>
+This documentation can be accessed with the icon shown below
+on the wii system computer after logging in :
+</P>
+
+<P align=center>
+ <IMG SRC=helpIcon.png>
+</P>
+
+<P align=center>
+ <B> The help icon </b>
+</P>
+
+<P>
+The system consists of :
+<UL>
+ <LI> A PC running Ubuntu linux
+ <LI> A (very small) bluetooth adapter
+ <LI> An early model wiiMote (a remote for the wii gaming system)
+ <LI> A system of straps for attaching the wiiMote to a child's head
+ <LI> Some custom software running on the PC
+</UL>
+</P>
+
+<P>
+The PC should have had the python scripting language
+and the wii library installed on it with the commands :
+</P>
+
+<PRE>
+sudo apt-get install python
+sudo apt-get install libcwiimote-dev python-cwiid python-tk
+</PRE>
+
+<P>
+Also, the gnome window manager should be installed. The R statistical
+package should be installed for data plotting purposes. This has been done
+at CU Boulder. The procedures for these installs are extensively
+documented on the web.
+</P>
+
+
+<P>
+The system operates by "rumbling" (vibrating) the wiiMote (which is strapped
+to the child's head) if their motion is determined to be excessive. The sensitivity of the
+system can be varied in real time. Also, data from the wiiMote can
+be written to a data file during a session.
+</P>
+
+<P>
+For operations in which motion occurs slowly, such as this,
+the wiiMote is fundamentally continually collecting a <b> vector</b>, that is,
+detecting the direction
+it is currently pointing in. Motion is detected by comparing the current vector
+to a reference vector and determining if the difference between the two has
+exceeded some angular threshold. The reference vector is initially
+taken to be the current vector when the rumble warnings are initially enabled.
+After a rumble warning is delivered, the current vector is again taken
+to be the reference vector and the process repeats.
+</P>
+
+<H2> Initial program operation </H2>
+
+<P>
+The program can be started by double clicking on the start icon :
+</P>
+
+<P align=center>
+ <IMG SRC=wiiRun.png>
+</P>
+
+<P align=center>
+ <B> The start icon </b>
+</P>
+
+<P>
+When the program first starts, a data entry window 
+similar to the one shown below will appear prompting
+the user for the subject's ID and age. The age must be a positive integer,
+and the subject ID can be any sequence of characters. Note that <b> both
+subject ID and age will be used to name output files</b>, so if subject
+anonimity is an issue then the subject's name should not be used as an ID.
+</P>
+
+<P align=center>
+ <IMG SRC=wiiStarting.png>
+</P>
+
+<P align=center>
+ <B> The initial data entry screen </b>
+</P>
+
+<H2> Bluetooth sync to wiimote </h2>
+
+<P>
+After the subject's ID and age are entered, the user will be prompted to
+<b> simultaneously press buttons (1) and (2) </b> on the wiiMote
+by a pop-up window similar to the one shown below. This will
+put the wiiMote into bluetooth <b> discoverable </b> mode so that
+a bluetooth connection to the wiiMote can be made.
+</P>
+
+<P align=center>
+ <IMG SRC=wiiSync.png>
+</P>
+
+<P align=center>
+ <B> The pop up sync window </b>
+</P>
+
+<H2> Main program operation </h2>
+
+<P>
+Once the program is running, it can be driven either via the
+wiiMote or via a Graphical User Interface (GUI) on the computer. The buttons
+on the wiiMote have the following significance :
+</P>
+
+<P align=center>
+ <table align=center border=5>
+  <tr> <th> wiiMote button </th> <th> Significance </th> </tr>
+  <tr> <td> A </td> <td> Accept current pointing vector as the reference </td> </tr>
+  <tr> <td> + (plus) </td> <td> Turn rumble warnings on </td> </tr>
+  <tr> <td> - (minus) </td> <td> Turn rumble warnings off </td> </tr>
+  <tr> <td> Home </td> <td> Exit program </td> </tr>
+ </table>
+</P>
+
+<P align=center>
+ <B> wiiMote buttons </b>
+</P>
+
+
+<P>
+The GUI (shown below) is very simple. It displays the current
+angular tolerance, in degrees, between the
+reference vector and the current vector. If this angular tolerance
+is exceeded and rumble warnings are enabled, a rumble warning will be delivered. The number
+of rumble warnings that have been delivered is also shown. There are also six
+clickable buttons, as follows :
+</P>
+
+
+<P align=center>
+ <IMG SRC=wiiRunning.png>
+</P>
+
+<P align=center>
+ <B> The program GUI </b>
+</P>
+
+
+<P align=center>
+ <table align=center border=5>
+
+  <tr> <th> GUI button </th> <th> Significance </th> </tr>
+
+  <tr> <td> Increment angle </td> 
+       <td> Increment the allowable angle between the reference
+            vector and the current vector (make the system more sensitive). 
+            The maximum for this value is 20.0 degrees. It is initially
+            set to 10.0 degrees. </td> </tr>
+
+  <tr> <td> Decrement angle </td> 
+       <td> Decrement the allowable angle between the reference
+            vector and the current vector (make the system more sensitive).
+            The minimum for this value is 2.0 degrees which seems to
+            be the maximum useful sensitivity of the device. </td> </tr>
+
+  <tr> <td> Turn rumbling on/off </td> 
+       <td> Turns rumble warnings on or off. See comments below. </td> </tr>
+
+  <tr> <td> Turn logging on/off </td> 
+       <td> Turns data logging - the writing of data to output text files -
+            on or off. See the <b> Output data files </b> section.  </td> </tr>
+
+
+  <tr> <td> Accept current angle </td>
+       <td> Take the current pointing vector as the reference angle. </td> </tr>
+
+  <tr> <td> Exit </td> <td> Exit the program  </td> </tr>
+
+ </table>
+</P>
+
+<P align=center>
+ <B> The GUI buttons </b>
+</P>
+
+<P>
+When <b> rumble warnings </b> are initially enabled, the current pointing vector is
+taken as the reference angle. If the subject's movement subsequently causes the angle between
+the current pointing vector and the reference angle to exceed the angular tolerance, then
+a rumble warning is delivered to the subject. This consists of the wii "rumbling"
+(vibrating) and flashing its LED lights briefly. After the rumble warning, the current
+pointing vector is taken as the new reference vector, and the process continues.
+</P>
+
+
+<H2> Output data files </h2>
+
+<P>
+When logging is active, data are written to the wiiData/ subdirectory (this directory
+is created by the wiiAngle.py script if it does not exist). Files are named
+according to the convention <b> YYYYMMDD_hhmmss_ID_age_motion.csv</b>. For instance, data
+for an individual identified as <b> John Smith </b> age <b> 46 </b> for whom
+the program was run at <b> 11:52:05 on January 18, 2013 </b> would be
+written to a file named :
+</P>
+
+<PRE>
+20130118_115205_John_Smith_46_motion.csv
+</PRE>
+
+<P>
+These are comma separated variable (CSV) files that can be read into Excel.
+They have a non-numerical header line which is followed by numerical data.
+The columns in the file are :
+</P>
+
+<P align=center>
+ <table align=center border=5>
+  <tr> <th> Variable </th> <th> Variable type </th> <th> Significance </th> </tr>
+  <tr> <td> timeSec </td> <td> floating point </td> <td> Elapsed time, seconds, since program start </td> </tr>
+  <tr> <td> refX </td> <td> floating point </td>  <td> Reference vector X component </td> </tr>
+  <tr> <td> refY </td> <td> floating point </td>  <td> Reference vector Y component </td> </tr>
+  <tr> <td> refZ </td> <td> floating point </td>  <td> Reference vector Z component </td> </tr>
+  <tr> <td> dataX </td> <td> floating point </td>  <td> Current vector X component </td> </tr>
+  <tr> <td> dataY </td> <td> floating point </td>  <td> Current vector Y component </td> </tr>
+  <tr> <td> dataZ </td> <td> floating point </td>  <td> Current vector Z component </td> </tr>
+
+  <tr> <td> angularTolDegrees </td> <td> floating point </td>  
+   <td> Maximum angle between current and reference vectors </td> </tr>
+  <tr> <td> refToDataAngleDegrees </td> <td> floating point </td>  
+     <td> Angle between current and reference vectors </td> </tr>
+  <tr> <td> numRumbles </td> <td> Integer </td>  <td> Number of rumble warnings </td> </tr>
+
+ </table>
+</P>
+
+<P align=center>
+ <B> Datafile format </b>
+</P>
+
+<P>
+These files can be converted to a format that allows them to be read
+into matlab by removing the non-numerical header line. This can be done
+in a text editor, or a command similar to the following one can be
+used in a UNIX terminal window, which puts the results from the <b> .csv </b> file
+into a similarly named <B> .dat </b> file :
+</P>
+
+<PRE>
+cat 20130118_115205_John_Smith_46_motion.csv | grep -v timeSec > 20130118_115205_John_Smith_46_motion.dat
+</PRE>
+
+<H2> Generating simple data plots </H2>
+
+<P>
+Simple plots can be made of the data that were collected by the system
+in logging mode. To do this, start a terminal by using the icon below :
+</P>
+
+<P align=center>
+ <IMG SRC=terminalIcon.png>
+</P>
+
+<P align=center>
+ <B> The terminal icon </b>
+</P>
+
+<P>
+Then, enter the following command in the terminal :
+
+<PRE>
+cd wii
+</PRE>
+
+You only need to give that command once. To see the CSV data files
+that are available, use the command :
+
+<PRE>
+ls wiiData/*.csv
+</PRE>
+
+The available files will be listed. To generate a plot
+of the file named :
+
+<PRE>
+wiiData/20130123_172029_Niles_Oien_46_motion.csv
+</PRE>
+
+Enter the command :
+
+<PRE>
+./wiiPlot.R wiiData/20130123_172029_Niles_Oien_46_motion.csv
+</PRE>
+
+The output graphic file with the plot will be named similarly, but the
+name will end in .png rather than .csv. In this case the graphic file will
+be named :
+
+<PRE>
+wiiData/20130123_172029_Niles_Oien_46_motion.png
+</PRE>
+
+This graphic can be displayed with the command :
+
+<PRE>
+display wiiData/20130123_172029_Niles_Oien_46_motion.png
+</PRE>
+
+
+<P align=center>
+ <IMG SRC=samplePlot.png>
+</P>
+
+<P align=center>
+ <B> A sample data plot, angle vs. time </b>
+</P>
+
+
+</P>
+
+<H2> Accessing data </H2>
+
+<P>
+Probably the best way to access the CSV data files is to use
+a USB thumb drive. Insert a thumb drive into a USB port
+on the PC. It should appear on the desktop as
+an icon.
+</P>
+
+<P>
+Then,
+open the file browser by clicking
+on the <b> Places </b> tab at the top left of the desktop
+(next to the <B> Applications </b> tab). Open the home folder in
+the drop down menu that appears. Then, open the <b> wii </b>
+folder by double clicking on it, and then open the <b> wiiData </b>
+folder by double clicking on it. The .csv data files any
+.png graphic plots that have been generated will appear.
+</P>
+
+<P>
+Files can then be dragged onto the thumb drive to copy them out of the
+system.
+</P>
+
+<P>
+<B>
+When you are done dragging, right click on the thumb drive icon
+and select the option to safely remove or eject it
+</B>
+so that the drive is closed correctly (alternatively the PC can be shut down
+with the small icon at the top right of the screen before removing the
+thumb drive).
+</P>
+
+<P>
+To delete a file that is no longer needed (or has been copied elsewhere)
+the <b> rm </b> command can be used in a terminal, like this :
+</P>
+
+<PRE>
+rm wiiData/20130123_172029_Niles_Oien_46_motion.png
+</PRE>
+
+<P>
+Alternatively, files can be deleted by left clicking on them
+in the file browser.
+</P>
