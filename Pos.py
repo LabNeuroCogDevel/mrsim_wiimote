@@ -13,7 +13,7 @@ class Pos():
         self.a1 = []
         self.a2 = []
         self.a3 = []
-        self.means = [None]x6
+        self.means = [None] * 6
 
     def add_trans(self, trans):
         """
@@ -50,7 +50,7 @@ class Pos():
         x2 = get_mean(self.x)
         y2 = get_mean(self.y)
         z2 = get_mean(self.z)
-        self.mean[0:3] = [x2, y2, z2]
+        self.means[0:3] = [x2, y2, z2]
         self.etrans = math.sqrt((x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2)
         return self.etrans
 
@@ -67,7 +67,7 @@ class Pos():
         Ym=get_mean(self.a2)
         Zm=get_mean(self.a3)
 
-        self.mean[3:6] = [Xm, Ym, Zm]
+        self.means[3:6] = [Xm, Ym, Zm]
 
         dot = Xm*X0 + Ym*Y0 + Zm*Z0
         modA=math.sqrt(Xm*Xm + Ym*Ym + Zm*Zm)
@@ -78,12 +78,13 @@ class Pos():
         if (cosAlpha < -1.0) : cosAlpha=-1.0
         alpha=math.acos(cosAlpha)
         self.alphaDeg=180.0*alpha/math.pi
-        return(self.alphaDeg)
+        return self.alphaDeg
 
-   def current_enorm(self):
-       pass 
-    
-   def fd(self):
+
+    def current_enorm(self):
+        pass 
+     
+    def fd(self):
        pass
 
 def get_mean(a):
