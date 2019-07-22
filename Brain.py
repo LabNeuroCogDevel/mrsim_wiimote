@@ -17,10 +17,6 @@ class glBrain(pyglet.window.Window):
         
         self.lightfv = ctypes.c_float * 4
         self.rotation = 0
-        self.label = pyglet.text.Label('world',
-                                       font_size=36,
-                                       x=self.width//2,
-                                       y=self.height//2)
 
     def on_resize(self, width, height):
         glMatrixMode(GL_PROJECTION)

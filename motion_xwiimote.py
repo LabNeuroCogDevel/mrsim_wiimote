@@ -3,6 +3,7 @@
 from Pos import Pos
 from xwii import connect_wii
 import xwiimote
+from Brain import glBrain
 
 
 ### connect to device
@@ -14,6 +15,7 @@ exit_count = 0
 (dev, p, evt) = connect_wii()
 # how to track position
 pos = Pos()
+win = glBrain()
 
 while exit_count < 2:
     p.poll()
@@ -22,7 +24,7 @@ while exit_count < 2:
         if evt.type == xwiimote.EVENT_KEY:
             code, state = evt.get_key()
             print("Key:", code, ", State:", state)
-            exit_count +=1
+            exit_count += 1
         elif evt.type == xwiimote.EVENT_GONE:
             print("Gone")
             exit_count = 2
@@ -36,6 +38,7 @@ while exit_count < 2:
             rot = pos.add_rot(evt.get_abs(0))
             if rot:
                 print("rot: ", rot)
+                win.update_angle(rot)
 
         else:
             print("unkown specified event:", evt.type)
