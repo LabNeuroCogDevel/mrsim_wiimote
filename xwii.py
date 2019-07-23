@@ -24,8 +24,7 @@ def connect_wii():
 
     # continue only if there is a wiimote
     if firstwiimote is None:
-        print("No wiimote to read")
-        exit(0)
+        raise Exception("No wiimote to read")
 
     # create a new iface
     try:
@@ -35,7 +34,7 @@ def connect_wii():
 
     except IOError as e:
         print("Do you have system device permission?", e)
-        exit(1)
+        raise e
 
     ### 
 

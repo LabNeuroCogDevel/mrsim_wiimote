@@ -4,6 +4,7 @@ from Pos import Pos
 from xwii import connect_wii
 import xwiimote
 from Brain import glBrain
+import InfoDialog
 
 
 ### connect to device
@@ -12,11 +13,21 @@ from Brain import glBrain
 exit_count = 0
 
 # connect to wii
-(dev, p, evt) = connect_wii()
+try:
+    (dev, p, evt) = connect_wii()
+except Exception as e:
+    InfoDialog.errorMsg("failed connect to wii: %s" % e)
+    exit(1)
+
 # how to track position
 pos = Pos()
 win = glBrain()
 
+# who's position are we tracking
+dlg = InfoDialog.InfoDialog()
+sid, age = dlg.run()
+
+total_rot = 0
 while exit_count < 2:
     p.poll()
     try:
@@ -37,8 +48,9 @@ while exit_count < 2:
             # None when still collecint samples. number otherwise
             rot = pos.add_rot(evt.get_abs(0))
             if rot:
+                total_rot = (total_rot + rot) % 360
                 print("rot: ", rot)
-                win.update_angle(rot)
+                win.update_angle(total_rot)
 
         else:
             print("unkown specified event:", evt.type)
