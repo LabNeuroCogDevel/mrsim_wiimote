@@ -1,7 +1,14 @@
 
 from math import sqrt
 from select import poll, POLLIN
+from time import sleep
 import xwiimote
+
+def rumble(dev):
+    """ vibrate the wiimote, need dev handle """
+    dev.rumble(True)
+    sleep(1/4.0)
+    dev.rumble(False)
 
 def connect_wii():
     """
