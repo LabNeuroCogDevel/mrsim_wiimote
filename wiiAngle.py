@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 # Program to encourage kids to hold a wiimote still. Wiimote is attached to their head
 # so that they hold still in mock fMRI scanner for training.

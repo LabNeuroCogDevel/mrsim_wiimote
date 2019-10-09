@@ -6,6 +6,6 @@
 # Niles Oien January 2013.
 #
 
-firefox /home/lncd/wii/documentation/wiiAngle.html &> /dev/null &
+netsurf /home/lncd/wii/documentation/wiiAngle.html &> /dev/null &
 
 
